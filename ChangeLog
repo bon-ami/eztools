@@ -1,0 +1,15 @@
+0.0	20190930	Allen Tse
+	Uploaded to github.com and open-sourced.
+0.1	20191030	Allen Tse
+	contacts and team management supported.
+0.2	20201028	Allen Tse
+	InitFieldNames() changed to initFieldNames() completely
+	xml reading supported
+	restful api supported
+0.3	20201029	Allen Tse
+	Connect() uses xml instead of code
+	ConnectWtCfg() added to customize file name
+	xml correction
+1.0	20201120	Allen Tse
+	go modules supported
+	digest import changed to improve http body handling
