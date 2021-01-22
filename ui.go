@@ -212,7 +212,14 @@ func ChkCfmNPrompt(noti, exception string) bool {
 	return true
 }
 
-func chooseStringsWtIDs(fL func() int, fI func(int) int,
+// ChooseStringsWtIDs is for general usage to
+// ask user to choose from a slice
+// parameters.
+//	fL=quantity of elements
+//	fI=get index to match user's input
+//	fV=get message to show for each index
+//	notif=notification string for user
+func ChooseStringsWtIDs(fL func() int, fI func(int) int,
 	fV func(int) string, notif string) (res int) {
 	len := fL()
 	if len < 1 {
@@ -236,7 +243,7 @@ func chooseStringsWtIDs(fL func() int, fI func(int) int,
 // ChooseInts asks user to choose from a slice
 // Parameters. arr[][0]=id. arr[][1]=string
 func ChooseInts(arr [][]string, notif string) (id int) {
-	return chooseStringsWtIDs(
+	return ChooseStringsWtIDs(
 		func() int {
 			return len(arr)
 		},
@@ -255,7 +262,7 @@ func ChooseInts(arr [][]string, notif string) (id int) {
 
 // Return values. zero value is default
 func choosePairs(choices []pairs, notif string) (res int) {
-	return chooseStringsWtIDs(
+	return ChooseStringsWtIDs(
 		func() int {
 			return len(choices)
 		},
