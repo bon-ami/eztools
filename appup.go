@@ -48,7 +48,9 @@ func AppUpgrade(db *sql.DB, prefix string, ver string, server *chan string, ch c
 		ch <- false
 		return
 	}
-	Log("update check response temp")
+	if Debugging && Verbose > 2 {
+		Log("update check response temp")
+	}
 	ch <- true
 	if server != nil {
 		*server <- upPairs[0].str
@@ -79,6 +81,8 @@ func AppUpgrade(db *sql.DB, prefix string, ver string, server *chan string, ch c
 			}
 		}
 	}
-	Log("update check response final")
+	if Debugging && Verbose > 2 {
+		Log("update check response final")
+	}
 	ch <- true
 }

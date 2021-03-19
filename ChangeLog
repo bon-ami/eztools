@@ -13,3 +13,5 @@
 1.0	20201120	Allen Tse
 	go modules supported
 	digest import changed to improve http body handling
+1.1	20210319	Allen Tse
+	no debugging logging in app upgrade
