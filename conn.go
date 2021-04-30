@@ -3,8 +3,6 @@ package eztools
 import (
 	"database/sql"
 	"encoding/xml"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -26,7 +24,7 @@ func ConnectWtParam(user, pass, ip, database string) (db *sql.DB, err error) {
 	return
 }
 
-// Connect connects to the database using parameters from an xml file
+// ConnectWtCfg connects to the database using parameters from an xml file
 // root element is named "root", elements include "ip", "db", "user" and "pass"
 func ConnectWtCfg(file string) (*sql.DB, error) {
 	var cfg struct {
@@ -37,7 +35,7 @@ func ConnectWtCfg(file string) (*sql.DB, error) {
 		StrDB   string   `xml:"db"`
 	}
 
-	if err := XMLsReadDefault("", file, &cfg); err != nil {
+	if _, err := XMLsReadDefaultNoCreate("", file, &cfg); err != nil {
 		return nil, err
 	}
 	if len(cfg.StrUSER) < 1 ||

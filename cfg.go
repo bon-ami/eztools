@@ -7,41 +7,66 @@ import (
 	"path/filepath"
 )
 
-// XMLRead reads config file into input structure
-func XMLRead(name string, data interface{}) error {
-	// directly open, without checking existence
-	file, err := os.Open(name)
+// XMLWrite writes input structure to file
+func XMLWrite(file string, data interface{}, createIfNeeded bool) error {
+	if !createIfNeeded {
+		if _, err := os.Stat(file); err != nil {
+			return err
+		}
+	}
+	bytes, err := xml.Marshal(data)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	/*decoder := xml.NewDecoder(file)
-	err = decoder.Decode(data)
-	ShowSthln(data)*/
-	bytes, _ := ioutil.ReadAll(file)
-	err = xml.Unmarshal(bytes, data)
-	return err
+	return ioutil.WriteFile(file, bytes, 0664)
 }
 
-// XMLsReadDefault reads config file into input structure from
-// give path, or give file name (plus .xml) under current dir or home dir
-func XMLsReadDefault(path, file string, cfg interface{}) (err error) {
+// XMLWriteNoCreate writes config file from input structure
+// by a full path (with .xml extension)
+func XMLWriteNoCreate(file string, cfg interface{}) error {
+	return XMLWrite(file, cfg, false)
+}
+
+// XMLRead reads file into input structure
+func XMLRead(file string, data interface{}, _ bool) error {
+	if _, err := os.Stat(file); err != nil {
+		return err
+	}
+	bytes, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	return xml.Unmarshal(bytes, data)
+}
+
+// XMLsReadDefault reads a config file
+func XMLsReadDefault(path, file string, cfg interface{},
+	createIfNeeded bool) (
+	pathFound string, err error) {
 	if len(path) > 0 {
-		err = XMLRead(path, cfg)
+		err = XMLRead(path, cfg, createIfNeeded)
 		if err == nil {
-			return
+			return path, err
 		}
 	}
 	if len(file) < 1 {
-		return ErrNoValidResults
+		return "", ErrNoValidResults
 	}
 	home, _ := os.UserHomeDir()
 	cfgPaths := [...]string{".", home}
 	for _, path1 := range cfgPaths {
-		err = XMLRead(filepath.Join(path1, file+".xml"), cfg)
+		pathFound = filepath.Join(path1, file+".xml")
+		err = XMLRead(pathFound, cfg, createIfNeeded)
 		if err == nil {
-			break
+			return
 		}
 	}
-	return
+	return "", ErrNoValidResults
+}
+
+// XMLsReadDefaultNoCreate reads config file into input structure from
+// given path, or given file name (plus .xml) under current dir or home dir
+// returns full file name with path
+func XMLsReadDefaultNoCreate(path, file string, cfg interface{}) (string, error) {
+	return XMLsReadDefault(path, file, cfg, false)
 }

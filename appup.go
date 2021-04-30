@@ -14,13 +14,13 @@ func AppUpgrade(db *sql.DB, prefix string, ver string, server *chan string, ch c
 		str string
 	}
 	upPairs := []pairs{
-		pairs{
+		{
 			"Url", "",
 		},
-		pairs{
+		{
 			"Dir", "",
 		},
-		pairs{
+		{
 			"App", "",
 		},
 	}
