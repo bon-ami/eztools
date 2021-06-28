@@ -53,8 +53,8 @@ func logOrPrint(print2 bool, out ...interface{}) {
 }
 
 // Log logs it
-func Log(out string) {
-	logOrPrint(false, out)
+func Log(out ...interface{}) {
+	logOrPrint(false, out...)
 }
 
 // LogPrint logs and prints it
@@ -62,7 +62,7 @@ func LogPrint(out ...interface{}) {
 	logOrPrint(true, out...)
 }
 
-// LogPrintWtTime logs and prints it with time
+// LogPrintWtTime logs and prints a string with time
 func LogPrintWtTime(out string) {
 	LogPrint(time.Now().String() + ": " + out)
 }
@@ -74,7 +74,7 @@ func LogErrPrint(err error) {
 	}
 }
 
-// LogErrPrintWtInfo logs and prints error with information
+// LogErrPrintWtInfo logs and prints error with information string
 func LogErrPrintWtInfo(info string, err error) {
 	if err != nil {
 		LogPrint(info + ": " + err.Error())
@@ -88,7 +88,7 @@ func LogErr(err error) {
 	}
 }
 
-// LogErrWtInfo logs error with information
+// LogErrWtInfo logs error with information string
 func LogErrWtInfo(info string, err error) {
 	if err != nil {
 		Log(info + ": " + err.Error())
@@ -96,12 +96,12 @@ func LogErrWtInfo(info string, err error) {
 }
 
 // LogFatal logs and prints it and exits
-func LogFatal(out string) {
+func LogFatal(out ...interface{}) {
 	if logger != nil {
-		fmt.Println(out)
-		logger.Fatalln(out)
+		fmt.Println(out...)
+		logger.Fatalln(out...)
 	} else {
-		log.Fatalln(out)
+		log.Fatalln(out...)
 	}
 }
 
